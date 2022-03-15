@@ -1,0 +1,58 @@
+# A workflow to check for consistency of changed ontology files
+name: Check Ontology Competency
+
+# Controls when the workflow will run
+on:
+  # Triggered by PRs to develop
+  pull_request:
+    types:
+      - opened
+    paths:
+      - '**.owl'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "check-consistency"
+  check-competency:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Setup a JVM
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+          
+      # Upload reasoner
+     # - name: Archive production artifacts
+      #  uses: actions/upload-artifact@v2
+      #  with:
+       #   name: occ
+        #  path: occ
+      
+      # Get changed files and run occ
+      - name: Get files and check competency
+        id: checkAllFiles
+        run: |
+          URL="https://api.github.com/repos/${{github.repository}}/pulls/${{github.event.pull_request.number}}/files"
+          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          for f in $FILES 
+          do 
+            if [[ $f == *".owl"* ]]; then
+              reasoner_result="$(java -jar "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/OCC.jar" -f $f -q "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/CQ" -a "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/CQ")"
+           
+            else
+              echo "no owl $f"
+            fi
+            echo "::set-output name=result::$result"
+          done
+            
+      
