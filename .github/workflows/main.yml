@@ -31,13 +31,8 @@ jobs:
         with:
           java-version: 17
           
-      # Upload reasoner
-     # - name: Archive production artifacts
-      #  uses: actions/upload-artifact@v2
-      #  with:
-       #   name: occ
-        #  path: occ
-
+      
+      # Get changed files and run occ
       - name: Get files and check competency
         id: checkAllFiles
         run: |
@@ -46,12 +41,12 @@ jobs:
            for f in $FILES 
            do 
              if [[ $f == *".owl"* ]]; then
-      #         reasoner_result="$(java -jar "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/OCC.jar" -f $f -q "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/CQ" -a "https://raw.githubusercontent.com/${{github.repository}}/master/.github/workflows/OCC/CQ")"
+     
                echo "owl found with name $f"      
              else
                echo "no owl $f"
              fi
-      #       echo "::set-output name=result::$result"
+   
            done
             
       
