@@ -40,8 +40,8 @@ jobs:
       
       # Get changed files and run occ
       - name: Get files and check competency
-          id: checkAllFiles
-         run: |
+        id: checkAllFiles
+        run: |
            URL="https://api.github.com/repos/${{github.repository}}/pulls/${{github.event.pull_request.number}}/files"
            FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
            for f in $FILES 
