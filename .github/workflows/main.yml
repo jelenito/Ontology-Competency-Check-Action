@@ -37,8 +37,7 @@ jobs:
       #  with:
        #   name: occ
         #  path: occ
-      
-      # Get changed files and run occ
+
       - name: Get files and check competency
         id: checkAllFiles
         run: |
