@@ -1,0 +1,14 @@
+{ "head": {
+    "vars": [ "givenName" ]
+  } ,
+  "results": {
+    "bindings": [
+	{ 
+        "givenName": { "type": "literal" , "value": "Rebecca" }
+      },
+      { 
+        "givenName": { "type": "literal" , "value": "John" }
+      } 
+    ]
+  }
+}
